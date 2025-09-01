@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Creatine Guide: An Interactive Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral -->
+    <!-- Application Structure Plan: A thematic, single-page scrolling application. The structure starts with a high-level introduction, leading to a central interactive choice between 'Benefits' and 'Risks'. This choice guides the user's exploration. Subsequent sections are visually distinct and provide deep dives into performance, cognitive effects, common myths (using an interactive 'Myth vs. Fact' component), and practical usage guidelines. This structure was chosen to transform a simple list of pros and cons into an engaging, educational journey, allowing users to control the information flow from a balanced starting point, thereby enhancing comprehension and usability. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Strength Gains -> Goal: Compare -> Viz: Bar Chart (Chart.js/Canvas) -> Interaction: Hover tooltips -> Justification: To visually quantify the primary performance benefit, making it more impactful than text alone.
+        - Report Info: Various Benefits/Risks -> Goal: Inform/Organize -> Viz: Icon-driven cards (HTML/CSS) -> Interaction: Subtle hover effects -> Justification: To break down complex information into easily digestible, thematic chunks.
+        - Report Info: Common Misconceptions (e.g., kidney damage) -> Goal: Clarify/Correct -> Viz: 'Myth vs. Fact' toggle component (HTML/JS) -> Interaction: Click-to-reveal -> Justification: To directly address and debunk widespread misinformation in an interactive and memorable way.
+        - Report Info: Dosing Strategy -> Goal: Instruct -> Viz: Timeline diagram (HTML/CSS/Tailwind) -> Interaction: Static visual -> Justification: To provide a clear, easy-to-follow visual guide for practical application.
+        Library/Method: Chart.js/Canvas for the chart, Vanilla JS for all interactions, and TailwindCSS for layout and styling. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #33312E;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .active-tab {
+            background-color: #008080 !important;
+            color: #ffffff !important;
+            border-color: #008080 !important;
+        }
+        .faq-question.open .faq-answer {
+            display: block;
+        }
+        .faq-question .faq-arrow {
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+        .faq-question.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="text-center py-12 md:py-20 bg-teal-50 border-b border-teal-100">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl md:text-6xl font-bold text-teal-800 leading-tight">The Interactive Guide to Creatine</h1>
+            <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-teal-700">An evidence-based look at one of the most studied supplements in the world. Understand its benefits, risks, and how it works.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="introduction" class="text-center max-w-4xl mx-auto mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">What is Creatine?</h2>
+            <p class="text-lg text-gray-600 leading-relaxed">
+                Creatine is a natural substance that turns into creatine phosphate in the body. This helps make a substance called adenosine triphosphate (ATP), which provides the energy for muscle contractions. Your body produces some creatine, and it's also found in protein-rich foods like meat and fish. As a supplement, it's used to boost athletic performance and muscle mass. This guide will help you explore the science-backed effects of supplementation.
+            </p>
+        </section>
+
+        <div class="sticky top-0 bg-white/80 backdrop-blur-sm z-10 py-4 mb-12 border-b">
+            <div class="flex justify-center items-center space-x-2 md:space-x-4">
+                 <a href="#benefits-section" class="nav-link text-center px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all duration-300 font-medium">Benefits</a>
+                <a href="#risks-section" class="nav-link text-center px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-300 font-medium">Risks & Myths</a>
+                <a href="#usage-section" class="nav-link text-center px-4 py-2 rounded-full border-2 border-gray-300 text-gray-600 hover:bg-gray-700 hover:text-white hover:border-gray-700 transition-all duration-300 font-medium">How to Use</a>
+            </div>
+        </div>
+        
+        <section id="benefits-section" class="mb-20 pt-16 -mt-16">
+            <div class="bg-teal-50 rounded-2xl p-8 md:p-12 border border-teal-100">
+                <div class="text-center mb-12">
+                     <span class="inline-block text-teal-600 text-5xl mb-4">&#x2728;</span>
+                    <h2 class="text-4xl font-bold text-teal-800">The Benefits</h2>
+                    <p class="mt-2 text-lg text-teal-700 max-w-3xl mx-auto">Creatine is primarily known for its effects on physical performance, but research also points to cognitive and therapeutic advantages.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Enhanced Strength & Power</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">By increasing the body's stores of phosphocreatine, supplementation allows for faster ATP regeneration. This directly translates to improved performance in short, explosive activities like weightlifting and sprinting. Users can often perform more reps or lift heavier weights, stimulating greater muscle growth over time.</p>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                            <h4 class="font-bold text-xl text-gray-800 flex items-center mb-2"><span class="text-2xl mr-3">&#x1F4AA;</span>Muscle Growth</h4>
+                            <p class="text-gray-600">Creatine draws water into muscle cells, an effect called cell volumization, which can trigger muscle growth. It also may increase levels of hormones involved in muscle mass, like IGF-1.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                            <h4 class="font-bold text-xl text-gray-800 flex items-center mb-2"><span class="text-2xl mr-3">&#x1F9E0;</span>Brain Health</h4>
+                            <p class="text-gray-600">Your brain also uses ATP for energy. Supplementation can enhance cognitive function, particularly in tasks requiring short-term memory and quick thinking, especially during stressful situations like sleep deprivation.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                            <h4 class="font-bold text-xl text-gray-800 flex items-center mb-2"><span class="text-2xl mr-3">&#x1F6E1;</span>Faster Recovery</h4>
+                            <p class="text-gray-600">Some studies suggest that creatine may reduce muscle cell damage and inflammation following intense exercise, helping athletes recover faster and tolerate higher training volumes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="risks-section" class="mb-20 pt-16 -mt-16">
+            <div class="bg-amber-50 rounded-2xl p-8 md:p-12 border border-amber-100">
+                <div class="text-center mb-12">
+                    <span class="inline-block text-amber-600 text-5xl mb-4">&#x26A0;</span>
+                    <h2 class="text-4xl font-bold text-amber-800">Risks & Common Myths</h2>
+                    <p class="mt-2 text-lg text-amber-700 max-w-3xl mx-auto">Creatine is very safe for most people, but some side effects can occur. Let's separate the facts from fiction.</p>
+                </div>
+                 <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Potential Side Effects</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                            <h4 class="font-bold text-xl text-gray-800 flex items-center mb-2"><span class="text-2xl mr-3">&#x1F7E8;</span>Water Weight Gain</h4>
+                            <p class="text-gray-600">Creatine causes muscles to retain water, leading to an initial weight increase of 2-4 pounds. This is cellular water, not body fat, and is often a desired effect.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                            <h4 class="font-bold text-xl text-gray-800 flex items-center mb-2"><span class="text-2xl mr-3">&#x1F922;</span>Digestive Issues</h4>
+                            <p class="text-gray-600">Taking too much creatine at once or not drinking enough water can sometimes cause stomach discomfort. This is usually avoided by sticking to recommended doses.</p>
+                        </div>
+                    </div>
+                    <div id="myth-buster">
+                         <h3 class="text-2xl font-bold text-gray-800 mb-4">Myth vs. Fact</h3>
+                        <div class="space-y-4">
+                            <div class="myth-item bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <button class="myth-question w-full text-left font-bold text-lg flex justify-between items-center text-red-700">
+                                    Myth: Creatine damages your kidneys.
+                                    <span class="text-xl">+</span>
+                                </button>
+                                <div class="myth-answer text-gray-600 mt-2 hidden">
+                                    <strong class="text-green-700">Fact:</strong> In healthy individuals, numerous long-term studies have shown no harmful effects on kidney function. People with pre-existing kidney disease should consult a doctor before use.
+                                </div>
+                            </div>
+                            <div class="myth-item bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <button class="myth-question w-full text-left font-bold text-lg flex justify-between items-center text-red-700">
+                                    Myth: Creatine causes dehydration and cramping.
+                                    <span class="text-xl">+</span>
+                                </button>
+                                <div class="myth-answer text-gray-600 mt-2 hidden">
+                                    <strong class="text-green-700">Fact:</strong> Creatine increases water content inside muscle cells. Studies do not support the idea that it causes dehydration; in fact, it may improve hydration status. As always, adequate water intake is important.
+                                </div>
+                            </div>
+                             <div class="myth-item bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                <button class="myth-question w-full text-left font-bold text-lg flex justify-between items-center text-red-700">
+                                    Myth: Creatine is a steroid.
+                                    <span class="text-xl">+</span>
+                                </button>
+                                <div class="myth-answer text-gray-600 mt-2 hidden">
+                                    <strong class="text-green-700">Fact:</strong> Creatine is not an anabolic steroid. It is a completely different compound with a different chemical structure and mechanism of action. Its safety and effects are well-documented.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="usage-section" class="mb-16 pt-16 -mt-16">
+            <div class="bg-gray-100 rounded-2xl p-8 md:p-12 border border-gray-200">
+                <div class="text-center mb-12">
+                     <span class="inline-block text-gray-600 text-5xl mb-4">&#x1F4A1;</span>
+                    <h2 class="text-4xl font-bold text-gray-800">How to Use Creatine Effectively</h2>
+                    <p class="mt-2 text-lg text-gray-700 max-w-3xl mx-auto">For best results, consistency is key. Here's a common and effective dosing strategy.</p>
+                </div>
+
+                <div class="max-w-4xl mx-auto">
+                    <div class="relative pl-8">
+                        <div class="absolute left-0 top-0 h-full w-1 bg-gray-300 rounded-full"></div>
+                        <div class="mb-12 relative">
+                            <div class="absolute left-[-10px] top-1 w-6 h-6 bg-teal-500 rounded-full border-4 border-white"></div>
+                            <h3 class="text-2xl font-bold text-teal-700">Phase 1: Loading (Optional)</h3>
+                            <p class="text-gray-600 mt-2">To rapidly saturate your muscles, take 20 grams per day for 5-7 days, split into four 5-gram servings. This phase is not necessary but will yield faster results.</p>
+                        </div>
+                         <div class="relative">
+                            <div class="absolute left-[-10px] top-1 w-6 h-6 bg-teal-500 rounded-full border-4 border-white"></div>
+                            <h3 class="text-2xl font-bold text-teal-700">Phase 2: Maintenance</h3>
+                            <p class="text-gray-600 mt-2">After the loading phase (or if you skip it), take 3-5 grams per day to maintain elevated muscle creatine stores. Take it every day, including on rest days.</p>
+                        </div>
+                    </div>
+                     <div class="mt-12 bg-white p-6 rounded-lg border border-gray-200">
+                        <h4 class="font-bold text-xl text-gray-800 mb-2">Important Tips:</h4>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2">
+                            <li><strong>Stay Hydrated:</strong> Drink plenty of water throughout the day.</li>
+                            <li><strong>Type:</strong> Creatine Monohydrate is the most researched, effective, and cheapest form.</li>
+                            <li><strong>Timing:</strong> Taking it post-workout with carbs and protein may slightly enhance uptake, but daily consistency is far more important than precise timing.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="max-w-4xl mx-auto py-12">
+            <h2 class="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+            <div class="space-y-4" id="faq-container">
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center py-8">
+        <p class="text-gray-400">Disclaimer: The information on this page is for educational purposes only.</p>
+        <p class="text-gray-400">Always consult with a healthcare professional before starting any new supplement regimen.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartCtx = document.getElementById('performanceChart').getContext('2d');
+            const performanceChart = new Chart(chartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Bench Press Strength', 'Sprint Power', 'Repetitions to Fatigue'],
+                    datasets: [{
+                        label: 'Placebo Group',
+                        data: [8, 10, 15],
+                        backgroundColor: 'rgba(156, 163, 175, 0.5)',
+                        borderColor: 'rgba(156, 163, 175, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Creatine Group',
+                        data: [20, 22, 35],
+                        backgroundColor: 'rgba(13, 148, 136, 0.6)',
+                        borderColor: 'rgba(13, 148, 136, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Hypothetical Performance Increase (%)',
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}% Increase`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) { return value + '%' }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const mythItems = document.querySelectorAll('.myth-item');
+            mythItems.forEach(item => {
+                const question = item.querySelector('.myth-question');
+                const answer = item.querySelector('.myth-answer');
+                const icon = question.querySelector('span');
+
+                question.addEventListener('click', () => {
+                    const isHidden = answer.classList.contains('hidden');
+                    if (isHidden) {
+                        answer.classList.remove('hidden');
+                        icon.textContent = '-';
+                    } else {
+                        answer.classList.add('hidden');
+                        icon.textContent = '+';
+                    }
+                });
+            });
+
+            const faqData = [
+                {
+                    q: "Do I need to cycle creatine?",
+                    a: "No, current research suggests that continuous use of creatine is safe and effective. There is no need to cycle on and off."
+                },
+                {
+                    q: "Will creatine make me look 'puffy'?",
+                    a: "Creatine pulls water into the muscle cells, not under the skin. This leads to a fuller, more muscular look, not a soft or puffy appearance."
+                },
+                {
+                    q: "Is creatine beneficial for women?",
+                    a: "Yes, women can experience the same performance, strength, and cognitive benefits as men without bulking up in the same way due to hormonal differences."
+                },
+                 {
+                    q: "When is the best time to take creatine?",
+                    a: "Consistency is most important. While some research suggests a minor benefit to taking it post-workout, taking it at any time that you'll remember consistently is the best approach."
+                }
+            ];
+
+            const faqContainer = document.getElementById('faq-container');
+            faqData.forEach(item => {
+                const faqElement = document.createElement('div');
+                faqElement.className = 'faq-question bg-white border border-gray-200 rounded-lg overflow-hidden';
+                faqElement.innerHTML = `
+                    <button class="w-full p-5 text-left font-semibold text-lg flex justify-between items-center transition">
+                        ${item.q}
+                        <span class="faq-arrow text-teal-500 text-2xl">&#x25BC;</span>
+                    </button>
+                    <div class="faq-answer p-5 pt-0 text-gray-600 hidden">
+                        ${item.a}
+                    </div>
+                `;
+                faqContainer.appendChild(faqElement);
+            });
+            
+            faqContainer.addEventListener('click', (e) => {
+                const questionHeader = e.target.closest('.faq-question button');
+                if (questionHeader) {
+                    const questionContainer = questionHeader.parentElement;
+                    const answer = questionContainer.querySelector('.faq-answer');
+                    
+                    questionContainer.classList.toggle('open');
+                    
+                    if (questionContainer.classList.contains('open')) {
+                        answer.style.display = 'block';
+                    } else {
+                         answer.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
